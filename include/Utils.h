@@ -1,0 +1,77 @@
+#pragma once
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <stdbool.h>
+#include <cglm/cglm.h>
+
+// Color Codes taken from https://gist.github.com/iamnewton/8754917
+#define COLOR_RESET       "\e[0m"
+#define COLOR_RED         "\e[0;31m"
+#define COLOR_GREEN       "\e[0;32m"
+#define COLOR_YELLOW      "\e[0;33m"
+#define COLOR_BLUE        "\e[0;34m"
+#define COLOR_WHITE       "\e[0;37m"
+#define COLOR_BOLD_RED    "\e[1;31m"
+#define COLOR_BOLD_GREEN  "\e[1;32m"
+#define COLOR_BOLD_YELLOW "\e[1;33m"
+#define COLOR_BOLD_BLUE   "\e[1;34m"
+#define COLOR_BOLD_WHITE  "\e[1;37m"
+
+// Printing Macros
+#define log_debug(...) printf("%s[Debug]: %s", COLOR_BOLD_WHITE, COLOR_WHITE); printf(__VA_ARGS__); printf(COLOR_RESET)
+#define log_info(...) printf("%s[Info]: %s", COLOR_BOLD_WHITE, COLOR_BLUE); printf(__VA_ARGS__); printf(COLOR_RESET)
+#define log_warn(...) printf("%s[Warning]: %s", COLOR_BOLD_WHITE, COLOR_YELLOW); printf(__VA_ARGS__); printf(COLOR_RESET)
+#define log_error(...) printf("%s[Error]: %s", COLOR_BOLD_WHITE, COLOR_RED); printf(__VA_ARGS__); printf(COLOR_RESET)
+
+// Structs
+typedef struct
+{
+	bool right;
+	bool left;
+	bool up;
+	bool down;
+} InputState;
+
+
+// Functions
+char* readFile(const char* filepath);
+void fixAngle(float* angle, float min, float max);
+
+#ifdef UTILS_DEF
+char* readFile(const char* filepath)
+{
+	if(access(filepath, F_OK) != 0)
+	{
+		log_error("File %s does not exist!\n", filepath);
+		exit(EXIT_FAILURE);
+	}
+
+	char* buffer;
+	long length;
+
+	FILE* file = fopen(filepath, "r");
+
+	if(file)
+	{
+		fseek(file, 0, SEEK_END);
+		length = ftell(file);
+		fseek(file, 0, SEEK_SET);
+
+		buffer = malloc(length + 1);
+
+		if(buffer)
+		{
+			fread(buffer, 1, length, file);
+		}
+
+		buffer[length] = '\0';
+
+		fclose(file);
+	}
+
+	return buffer;
+}
+#endif

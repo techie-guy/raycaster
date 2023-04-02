@@ -5,6 +5,13 @@
 #include "Utils.h"
 #include <glad/gl.h>
 
+Vertex sceneLineVertices[4];
+
+unsigned int sceneLineIndices[6] =
+{
+	0, 1, 2,
+	2, 3, 0
+};
 
 Vertex lineVertices[2];
 unsigned int lineIndices[2] =
@@ -24,7 +31,7 @@ void initRay()
 	initVertexAttributes(&rayVertexAttributes, NULL, sizeof(lineVertices), lineIndices, sizeof(lineIndices));
 
 	initShaderProgram(&sceneShaderProgram, "assets/shaders/line-vertex-shader.glsl", "assets/shaders/line-fragment-shader.glsl");
-	initVertexAttributes(&sceneVertexAttributes, NULL, sizeof(lineVertices), lineIndices, sizeof(lineIndices));
+	initVertexAttributes(&sceneVertexAttributes, NULL, sizeof(sceneLineVertices), sceneLineIndices, sizeof(sceneLineIndices));
 }
 
 void drawRay(vec3 playerPos, float playerAngle, mat4 viewTimesProj)
@@ -208,23 +215,28 @@ void drawRay(vec3 playerPos, float playerAngle, mat4 viewTimesProj)
 
 		finalDist = finalDist * cos(cosAngle);
 
-		float lineHeight = (MAP_SIZE * 320)/finalDist;
-		if(lineHeight > 320)
-			lineHeight = 320;
+		float width = 320;
+		float height = 160;
+		float lineWidth = 8;
 
-		float lineOffset = 160 - lineHeight/2;
+		float lineHeight = (MAP_SIZE * width)/finalDist;
+		if(lineHeight > width)
+			lineHeight = width;
 
-		glLineWidth(8);
-		lineVertices[0] = (Vertex){{rayCount * 8 + 530, lineOffset, 0.0f}, {sceneLighting[0], sceneLighting[1], sceneLighting[2], sceneLighting[3]}};
-		lineVertices[1] = (Vertex){{rayCount * 8 + 530, lineOffset + lineHeight, 0.0f}, {sceneLighting[0], sceneLighting[1], sceneLighting[2], sceneLighting[3]}};
+		float lineOffset = height - lineHeight/2;
+
+		sceneLineVertices[0] = (Vertex){{rayCount * lineWidth + 530, lineOffset, 0.0f}, {sceneLighting[0], sceneLighting[1], sceneLighting[2], sceneLighting[3]}};
+		sceneLineVertices[1] = (Vertex){{rayCount * lineWidth + 530 + lineWidth, lineOffset, 0.0f}, {sceneLighting[0], sceneLighting[1], sceneLighting[2], sceneLighting[3]}};
+		sceneLineVertices[2] = (Vertex){{rayCount * lineWidth + 530 + lineWidth, lineOffset + lineHeight, 0.0f}, {sceneLighting[0], sceneLighting[1], sceneLighting[2], sceneLighting[3]}};
+		sceneLineVertices[3] = (Vertex){{rayCount * lineWidth + 530, lineOffset + lineHeight, 0.0f}, {sceneLighting[0], sceneLighting[1], sceneLighting[2], sceneLighting[3]}};
 
 		bindShaderProgram(&sceneShaderProgram);
 		glUniformMatrix4fv(glGetUniformLocation(sceneShaderProgram, "viewTimesProj"), 1, GL_FALSE, (float*)viewTimesProj);
 		
 		bindVAO(&sceneVertexAttributes);
 		bindVBO(&sceneVertexAttributes);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(lineVertices), lineVertices);
-		glDrawElements(GL_LINES, 2, GL_UNSIGNED_INT, 0);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(sceneLineVertices), sceneLineVertices);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 
 		rayAngle += glm_rad(1);

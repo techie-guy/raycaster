@@ -2,22 +2,28 @@
 #include "Utils.h"
 #include <glad/gl.h>
 
-void checkForErrors(unsigned int* id, int status)
+void checkForErrors(unsigned int id, int status)
 {
 	int success;
 	char infoLog[512];
-	glGetShaderiv(*id, status, &success);
 
-	if(!success)
+	if(status == GL_COMPILE_STATUS)
 	{
-		glGetShaderInfoLog(*id, 512, NULL, infoLog);
+		glGetShaderiv(id, status, &success);
 
-		if(status == GL_COMPILE_STATUS)
+		if(!success)
 		{
+			glGetShaderInfoLog(id, 512, NULL, infoLog);
 			log_error("Error in Compiling Shader\n%s\n", infoLog);
 		}
-		else if(status == GL_LINK_STATUS)
+	}
+	else if(status == GL_LINK_STATUS)
+	{
+		glGetProgramiv(id, status, &success);
+
+		if(!success)
 		{
+			glGetProgramInfoLog(id, 512, NULL, infoLog);
 			log_error("Error in Linking Shaders\n%s\n", infoLog);
 		}
 	}
@@ -29,7 +35,7 @@ void compileShader(unsigned int* shader, const int shaderType, const char** shad
 	glShaderSource(*shader, 1, shaderSource, NULL);
 	glCompileShader(*shader);
 
-	checkForErrors(shader, GL_COMPILE_STATUS);
+	checkForErrors(*shader, GL_COMPILE_STATUS);
 }
 
 void initShaderProgram(unsigned int* shaderProgram, const char* vertexShaderSourcePath, const char* fragmentShaderSourcePath)
@@ -48,7 +54,7 @@ void initShaderProgram(unsigned int* shaderProgram, const char* vertexShaderSour
 	glAttachShader(*shaderProgram, fragmentShader);
 	glLinkProgram(*shaderProgram);
 
-	checkForErrors(shaderProgram, GL_LINK_STATUS);
+	checkForErrors(*shaderProgram, GL_LINK_STATUS);
 
 	free(vertexShaderSource);
 	free(fragmentShaderSource);

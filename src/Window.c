@@ -3,6 +3,11 @@
 #include "Window.h"
 #include "Utils.h"
 
+void APIENTRY GLDebugMessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar *msg, const void *data)
+{
+	log_error("OpenGL Error: id: %d, source: %d, type: %d, severity: %d, Message: %s\n\n", id, source, type, severity, msg);
+}
+
 void initWindow(Window* window)
 {
 	glfwInit();
@@ -19,6 +24,8 @@ void initWindow(Window* window)
 	glfwSwapInterval(1);
 
 	gladLoadGL(glfwGetProcAddress);
+	glEnable(GL_DEBUG_OUTPUT);
+	glDebugMessageCallback(GLDebugMessageCallback, NULL);
 }
 
 void updateWindow(Window* window)

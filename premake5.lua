@@ -18,6 +18,7 @@ project "raycaster"
 		"include",
 		"third_party/glad/include",
 		"third_party/cglm/include",
+		"third_party/stb/include",
 	}
 
 	buildoptions {
@@ -32,6 +33,7 @@ project "raycaster"
 		"src/**.h",
 		"src/**.c",
 		"third_party/cglm/src/**.c",
+		"third_party/stb/src/**.c",
 	}
 
 	filter "configurations:Debug"

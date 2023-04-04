@@ -232,7 +232,7 @@ void drawRay(vec3 playerPos, float playerAngle, mat4 viewTimesProj)
 
 		bindShaderProgram(&sceneShaderProgram);
 		glUniformMatrix4fv(glGetUniformLocation(sceneShaderProgram, "viewTimesProj"), 1, GL_FALSE, (float*)viewTimesProj);
-		
+
 		bindVAO(&sceneVertexAttributes);
 		bindVBO(&sceneVertexAttributes);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(sceneLineVertices), sceneLineVertices);

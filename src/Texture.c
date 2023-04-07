@@ -13,6 +13,8 @@ void initTexture(Texture* texture, const char* texturePath)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
+	stbi_set_flip_vertically_on_load(true);
+
 	unsigned char* textureData = stbi_load(texturePath, &texture->width, &texture->height, &texture->channels, 0);
 	if(textureData)
 	{
@@ -20,7 +22,7 @@ void initTexture(Texture* texture, const char* texturePath)
 	}
 	else
 	{
-		log_error("Invalid Texture Data: %s", texturePath);
+		log_error("Couldn't load texture: %s", texturePath);
 	}
 
 	stbi_image_free(textureData);

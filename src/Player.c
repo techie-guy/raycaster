@@ -66,7 +66,7 @@ void drawPlayer(mat4 viewTimesProj)
 	glPointSize(20.0f);
 
 	bindShaderProgram(&playerShaderProgram);
-	glUniformMatrix4fv(glGetUniformLocation(playerShaderProgram, "viewTimesProj"), 1, GL_FALSE, (float*)viewTimesProj);
+	uploadMat4(&playerShaderProgram, "viewTimesProj", viewTimesProj);
 
 	playerVertices[0].position[0] = playerPos[0];
 	playerVertices[0].position[1] = playerPos[1];

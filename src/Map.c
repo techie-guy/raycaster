@@ -66,7 +66,7 @@ void initMap()
 void drawMap(mat4 viewTimesProj)
 {
 	bindShaderProgram(&mapShaderprogram);
-	glUniformMatrix4fv(glGetUniformLocation(mapShaderprogram, "viewTimesProj"), 1, GL_FALSE, (float*)viewTimesProj);
+	uploadMat4(&mapShaderprogram, "viewTimesProj", viewTimesProj);
 
 	bindVAO(&mapVertexAttributes);
 	glDrawElements(GL_TRIANGLES, sizeof(mapIndices)/sizeof(mapIndices[0]), GL_UNSIGNED_INT, 0);

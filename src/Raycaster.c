@@ -1,6 +1,7 @@
 #include "Raycaster.h"
 #include "VertexAttributes.h"
 #include "ShaderProgram.h"
+#include "Texture.h"
 #include "Map.h"
 #include "Utils.h"
 #include <glad/gl.h>
@@ -24,6 +25,7 @@ unsigned int rayShaderProgram;
 
 VertexAttributes sceneVertexAttributes;
 unsigned int sceneShaderProgram;
+Texture texture;
 
 void initRay()
 {
@@ -32,6 +34,7 @@ void initRay()
 
 	initShaderProgram(&sceneShaderProgram, "assets/shaders/line-vertex-shader.glsl", "assets/shaders/line-fragment-shader.glsl");
 	initVertexAttributes(&sceneVertexAttributes, NULL, sizeof(sceneLineVertices), sceneLineIndices, sizeof(sceneLineIndices));
+	initTexture(&texture, "assets/textures/image.png");
 }
 
 void drawRay(vec3 playerPos, float playerAngle, mat4 viewTimesProj)
@@ -189,17 +192,17 @@ void drawRay(vec3 playerPos, float playerAngle, mat4 viewTimesProj)
 		}
 
 		// Draw The Ray
-		lineVertices[0] = (Vertex){{playerPos[0], playerPos[1], 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f}};
-		lineVertices[1] = (Vertex){{rayPos[0], rayPos[1], 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f}};
+//		lineVertices[0] = (Vertex){{playerPos[0], playerPos[1], 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f}};
+//		lineVertices[1] = (Vertex){{rayPos[0], rayPos[1], 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f}};
 
-		bindShaderProgram(&rayShaderProgram);
+//		bindShaderProgram(&rayShaderProgram);
 
-		glUniformMatrix4fv(glGetUniformLocation(rayShaderProgram, "viewTimesProj"), 1, GL_FALSE, (float*)viewTimesProj);
+//		glUniformMatrix4fv(glGetUniformLocation(rayShaderProgram, "viewTimesProj"), 1, GL_FALSE, (float*)viewTimesProj);
 
-		bindVAO(&rayVertexAttributes);
-		bindVBO(&rayVertexAttributes);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(lineVertices), lineVertices);
-		glDrawElements(GL_LINES, 2, GL_UNSIGNED_INT, 0);
+//		bindVAO(&rayVertexAttributes);
+//		bindVBO(&rayVertexAttributes);
+//		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(lineVertices), lineVertices);
+//		glDrawElements(GL_LINES, 2, GL_UNSIGNED_INT, 0);
 
 
 		// "3D" Scene
@@ -225,19 +228,19 @@ void drawRay(vec3 playerPos, float playerAngle, mat4 viewTimesProj)
 
 		float lineOffset = height - lineHeight/2;
 
-		sceneLineVertices[0] = (Vertex){{rayCount * lineWidth + 530, lineOffset, 0.0f}, {sceneLighting[0], sceneLighting[1], sceneLighting[2], sceneLighting[3]}};
-		sceneLineVertices[1] = (Vertex){{rayCount * lineWidth + 530 + lineWidth, lineOffset, 0.0f}, {sceneLighting[0], sceneLighting[1], sceneLighting[2], sceneLighting[3]}};
-		sceneLineVertices[2] = (Vertex){{rayCount * lineWidth + 530 + lineWidth, lineOffset + lineHeight, 0.0f}, {sceneLighting[0], sceneLighting[1], sceneLighting[2], sceneLighting[3]}};
-		sceneLineVertices[3] = (Vertex){{rayCount * lineWidth + 530, lineOffset + lineHeight, 0.0f}, {sceneLighting[0], sceneLighting[1], sceneLighting[2], sceneLighting[3]}};
+		sceneLineVertices[0] = (Vertex){{rayCount * lineWidth + 530, lineOffset, 0.0f}, {sceneLighting[0], sceneLighting[1], sceneLighting[2], sceneLighting[3]}, {0.0f, 0.0f}};
+		sceneLineVertices[1] = (Vertex){{rayCount * lineWidth + 530 + lineWidth, lineOffset, 0.0f}, {sceneLighting[0], sceneLighting[1], sceneLighting[2], sceneLighting[3]}, {0.0f, 1.0f}};
+		sceneLineVertices[2] = (Vertex){{rayCount * lineWidth + 530 + lineWidth, lineOffset + lineHeight, 0.0f}, {sceneLighting[0], sceneLighting[1], sceneLighting[2], sceneLighting[3]}, {1.0f, 1.0f}};
+		sceneLineVertices[3] = (Vertex){{rayCount * lineWidth + 530, lineOffset + lineHeight, 0.0f}, {sceneLighting[0], sceneLighting[1], sceneLighting[2], sceneLighting[3]}, {1.0f, 0.0f}};
 
 		bindShaderProgram(&sceneShaderProgram);
-		glUniformMatrix4fv(glGetUniformLocation(sceneShaderProgram, "viewTimesProj"), 1, GL_FALSE, (float*)viewTimesProj);
+		bindTexture(&texture);
+		uploadMat4(&rayShaderProgram, "viewTimesProj", viewTimesProj);
 
 		bindVAO(&sceneVertexAttributes);
 		bindVBO(&sceneVertexAttributes);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(sceneLineVertices), sceneLineVertices);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
 
 		rayAngle += glm_rad(1);
 		if(rayAngle < 0)
@@ -253,6 +256,8 @@ void drawRay(vec3 playerPos, float playerAngle, mat4 viewTimesProj)
 
 void destroyRay()
 {
+	destroyTexture(&texture);
+	
 	destroyShaderProgram(&rayShaderProgram);
 	destroyVertexAttributes(&rayVertexAttributes);
 

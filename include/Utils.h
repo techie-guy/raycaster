@@ -26,16 +26,6 @@
 #define log_warn(...) printf("%s[Warning]: %s", COLOR_BOLD_WHITE, COLOR_YELLOW); printf(__VA_ARGS__); printf(COLOR_RESET)
 #define log_error(...) printf("%s[Error]: %s", COLOR_BOLD_WHITE, COLOR_RED); printf(__VA_ARGS__); printf(COLOR_RESET)
 
-// Structs
-typedef struct
-{
-	bool right;
-	bool left;
-	bool up;
-	bool down;
-} InputState;
-
-
 // Functions
 char* readFile(const char* filepath);
 void fixAngle(float* angle, float min, float max);
@@ -49,7 +39,7 @@ char* readFile(const char* filepath)
 		exit(EXIT_FAILURE);
 	}
 
-	char* buffer;
+	char* buffer = "";
 	long length;
 
 	FILE* file = fopen(filepath, "r");

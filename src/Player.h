@@ -2,6 +2,14 @@
 
 #include "Utils.h"
 
+typedef struct
+{
+	bool right;
+	bool left;
+	bool up;
+	bool down;
+} InputState;
+
 extern vec3 playerPos;
 extern float playerAngle;
 extern float playerAngleSpeed;

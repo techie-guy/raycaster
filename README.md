@@ -9,18 +9,15 @@ This is inspired by 3DSage's very cool video: https://youtu.be/gYRrGTC7GtA
 
 Clone this repository recursively to pull in the submodules
 
-**To Build the Project:**
+**To Build the Project, You will need:**
 
--> You will need a C Compiler: Clang, GCC or Emscripten(not yet supported)
+-> A C Compiler: Clang, GCC or Emscripten(not yet supported)
 
--> pkg-config
-
--> Premake5
+-> make
 
 -> GLFW3
 
 You can Download them from your package manager
 
-After cloning the repo recursively, `cd` into it, then:
-1. Generate the project files (here Makefiles) using `premake5 gmake2`
-2. Use `make` to build the project
+After cloning the repo recursively, `cd` into it. Then use `make` to build the project.
+To run the executable use `make run`

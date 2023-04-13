@@ -228,14 +228,14 @@ void drawRay(vec3 playerPos, float playerAngle, mat4 viewTimesProj)
 
 		float lineOffset = height - lineHeight/2;
 
-		sceneLineVertices[0] = (Vertex){{rayCount * lineWidth + 530, lineOffset, 0.0f}, {sceneLighting[0], sceneLighting[1], sceneLighting[2], sceneLighting[3]}, {0.0f, 0.0f}};
-		sceneLineVertices[1] = (Vertex){{rayCount * lineWidth + 530 + lineWidth, lineOffset, 0.0f}, {sceneLighting[0], sceneLighting[1], sceneLighting[2], sceneLighting[3]}, {0.0f, 1.0f}};
-		sceneLineVertices[2] = (Vertex){{rayCount * lineWidth + 530 + lineWidth, lineOffset + lineHeight, 0.0f}, {sceneLighting[0], sceneLighting[1], sceneLighting[2], sceneLighting[3]}, {1.0f, 1.0f}};
-		sceneLineVertices[3] = (Vertex){{rayCount * lineWidth + 530, lineOffset + lineHeight, 0.0f}, {sceneLighting[0], sceneLighting[1], sceneLighting[2], sceneLighting[3]}, {1.0f, 0.0f}};
+		sceneLineVertices[0] = (Vertex){{rayCount * lineWidth + 530, lineOffset, 0.0f}, {sceneLighting[0], sceneLighting[1], sceneLighting[2], sceneLighting[3]}};
+		sceneLineVertices[1] = (Vertex){{rayCount * lineWidth + 530 + lineWidth, lineOffset, 0.0f}, {sceneLighting[0], sceneLighting[1], sceneLighting[2], sceneLighting[3]}};
+		sceneLineVertices[2] = (Vertex){{rayCount * lineWidth + 530 + lineWidth, lineOffset + lineHeight, 0.0f}, {sceneLighting[0], sceneLighting[1], sceneLighting[2], sceneLighting[3]}};
+		sceneLineVertices[3] = (Vertex){{rayCount * lineWidth + 530, lineOffset + lineHeight, 0.0f}, {sceneLighting[0], sceneLighting[1], sceneLighting[2], sceneLighting[3]}};
 
 		bindShaderProgram(&sceneShaderProgram);
 		bindTexture(&texture);
-		uploadMat4(&rayShaderProgram, "viewTimesProj", viewTimesProj);
+		uploadMat4(&sceneShaderProgram, "viewTimesProj", viewTimesProj);
 
 		bindVAO(&sceneVertexAttributes);
 		bindVBO(&sceneVertexAttributes);

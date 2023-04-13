@@ -6,7 +6,6 @@ typedef struct
 {
 	vec3 position;
 	vec4 color;
-	vec2 texCoord;
 } Vertex;
 
 typedef struct

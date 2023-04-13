@@ -34,10 +34,10 @@ void initMap()
 			}
 
 			Square square = {
-				(Vertex){{xOffset + 1, yOffset + 1, 0.0f}, {color[0], color[1], color[2], color[3]}, {0.0f, 0.0f}},
-				(Vertex){{xOffset + 1, yOffset + MAP_GRID_CELL_SIZE - 1, 0.0f}, {color[0], color[1], color[2], color[3]}, {0.0f, 0.0f}},
-				(Vertex){{xOffset + MAP_GRID_CELL_SIZE - 1, yOffset + MAP_GRID_CELL_SIZE - 1, 0.0f}, {color[0], color[1], color[2], color[3]}, {0.0f, 0.0f}},
-				(Vertex){{xOffset + MAP_GRID_CELL_SIZE - 1, yOffset + 1, 0.0f}, {color[0], color[1], color[2], color[3]}, {0.0f, 0.0f}},
+				(Vertex){{xOffset + 1, yOffset + 1, 0.0f}, {color[0], color[1], color[2], color[3]}},
+				(Vertex){{xOffset + 1, yOffset + MAP_GRID_CELL_SIZE - 1, 0.0f}, {color[0], color[1], color[2], color[3]}},
+				(Vertex){{xOffset + MAP_GRID_CELL_SIZE - 1, yOffset + MAP_GRID_CELL_SIZE - 1, 0.0f}, {color[0], color[1], color[2], color[3]}},
+				(Vertex){{xOffset + MAP_GRID_CELL_SIZE - 1, yOffset + 1, 0.0f}, {color[0], color[1], color[2], color[3]}},
 			};
 
 			mapVertices[index] = square;
